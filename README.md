@@ -4,6 +4,8 @@ Merge bookmark exports from several browsers into one deduplicated file, keeping
 designated master source intact. Pure Python 3 standard library — no dependencies, no
 network, runs on Windows / macOS / Linux.
 
+> 中文版：[README.zh-CN.md](README.zh-CN.md)
+
 ## What it does
 
 - Reads Netscape Bookmark HTML — the format every browser exports
