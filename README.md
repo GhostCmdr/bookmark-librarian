@@ -1,68 +1,63 @@
 # bookmark-librarian
 
-Merge bookmark exports from several browsers into one deduplicated file, keeping a
-designated master source intact. Pure Python 3 standard library — no dependencies, no
-network, runs on Windows / macOS / Linux.
+把多个浏览器的书签导出文件合并成一份，以指定主库为准去重。纯 Python 3 标准库 —— 无依赖、
+无网络，Windows / macOS / Linux 通用。
 
-> 中文版：[README.zh-CN.md](README.zh-CN.md)
+> English version: [README.en.md](README.en.md)
 
-## What it does
+## 功能
 
-- Reads Netscape Bookmark HTML — the format every browser exports
-- Dedupes by exact URL, and keeps the master's copy, order, titles, icons and dates
-- Routes the rest by a **folder map**: folders that mean the same thing merge into one,
-  same-name folders merge level by level, everything else is flattened to the end of the toolbar
-- **Learns** — your answers about folder grouping are remembered, so it never asks twice
-- **Chinese or English** — `--lang zh|en` changes the wording, nothing else
-- Writes one merged file and prints two tables (counts, duplicate detail)
+- 解析 Netscape 书签 HTML —— 所有浏览器导出的都是这个格式
+- 按完整 URL 去重，主库那份的副本、顺序、标题、图标、日期原样保留
+- 其余条目按**文件夹映射表**归置：同义的文件夹合并成一个，同名的逐级并入，剩下的拆平到工具栏末尾
+- **会记住** —— 你对文件夹归类的回答会被存下来，同样的问题不会问第二次
+- **中英双语** —— `--lang zh|en` 只改文案，别的都不动
+- 输出一份合并文件，并打印两张统计表（条数、重复明细）
 
-## Install
+## 安装
 
 ```
 npx skills add GhostCmdr/bookmark-librarian
 ```
 
-It follows the [Agent Skills](https://agentskills.io/specification) open format, so the same
-folder works across agents — the `skills` CLI detects which ones you have and wires it up.
+本技能遵循 [Agent Skills](https://agentskills.io/specification) 开放格式，同一个文件夹在各家
+agent 上通用 —— `skills` CLI 会自动探测你装了哪些并完成配置。
 
-To install by hand, clone into the folder your agent reads, keeping the name
-`bookmark-librarian`:
+手动安装：克隆到你的 agent 读取的目录，文件夹名保持 `bookmark-librarian`：
 
-| Agent | Path |
+| Agent | 路径 |
 | --- | --- |
-| Any Agent Skills client | `.agents/skills/bookmark-librarian/` |
+| 任意 Agent Skills 客户端 | `.agents/skills/bookmark-librarian/` |
 | Claude Code | `~/.claude/skills/bookmark-librarian/` |
-| TraeCode | `.trae/skills/bookmark-librarian/` (project) · `~/.trae-cn/skills/bookmark-librarian/` (global) |
+| TraeCode | `.trae/skills/bookmark-librarian/`（项目）· `~/.trae-cn/skills/bookmark-librarian/`（全局） |
 | Cursor | `.cursor/rules/bookmark-librarian.mdc` |
-| Any other / unsure | paste `SKILL.md` into `AGENTS.md` |
+| 其他 / 不确定 | 把 `SKILL.md` 的内容贴进 `AGENTS.md` |
 
-## Usage
+## 用法
 
 ```
 python3 scripts/merge.py --master Edge Edge=favorites.html Chrome=bookmarks.html
 python3 scripts/tables.py merge_stats.json 合并书签_Edge_Chrome.html
 ```
 
-- `--master <name>` — which source wins. Omit it for no-master mode (all sources equal,
-  full folder structure kept)
-- `--out <dir>` — where the merged file goes. Defaults to your desktop
-- `--dry-run` — print the routing plan and the ask list, write nothing
-- `--lang zh|en` — the wording of everything printed. Defaults to `zh`
-- One source only → in-file dedupe only
-- Compare two exports without merging: `python3 scripts/diff.py A.html Edge B.html Chrome`
+- `--master <名称>` —— 以哪个来源为准。省略即无主库模式（各来源平等，完整保留文件夹层级）
+- `--out <目录>` —— 合并文件的落点，默认桌面
+- `--dry-run` —— 只打印归置预案和待询问清单，不写任何文件
+- `--lang zh|en` —— 所有打印文案的语言，默认 `zh`
+- 只给一个来源 → 仅做文件内去重
+- 不合并、只比较两个导出文件：`python3 scripts/diff.py A.html Edge B.html Chrome`
 
-The merged file is the only deliverable; the tables are printed to the chat.
+合并文件是唯一的交付物；两张表只打印到对话里。
 
-Folder grouping is data, not code: `scripts/folder-map.json` ships the defaults and
-`~/.bookmark-librarian/folder-map.json` remembers what you taught. See `SKILL.md` for the
-full rules, and `examples/` for a runnable sample.
+文件夹归类是数据而非代码：`scripts/folder-map.json` 是内置默认，`~/.bookmark-librarian/folder-map.json`
+记住你教过的。完整规则见 `SKILL.md`，可运行示例见 `examples/`。
 
-## Tests
+## 测试
 
 ```
 python3 tests/test_bookmark_librarian.py
 ```
 
-## License
+## 许可
 
-MIT — see [LICENSE](LICENSE).
+MIT —— 见 [LICENSE](LICENSE)。
